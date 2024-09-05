@@ -776,44 +776,8 @@ class mod_scheduler_renderer extends plugin_renderer_base {
                 $url = new moodle_url($slotman->actionurl, array('what' => 'deleteslot', 'slotid' => $slot->slotid));
                 $confirmdelete = new confirm_action(get_string('confirmdelete-one', 'scheduler'));
                 $actions .= $this->action_icon($url, new pix_icon('t/delete', get_string('delete')), $confirmdelete);
-
-                $url = new moodle_url($slotman->actionurl, array('what' => 'updateslot', 'slotid' => $slot->slotid));
-                $actions .= $this->action_icon($url, new pix_icon('t/edit', get_string('edit')));
             }
 
-            if ($slot->isattended || $slot->isappointed > 1) {
-                $groupicon = 'i/groupevent';
-            } else if ($slot->exclusivity == 1) {
-                $groupicon = 't/groupn';
-            } else {
-                $groupicon = 't/groupv';
-            }
-            $groupalt = ''; $groupact = null;
-            if ($slot->isattended) {
-                $groupalt = 'attended';
-            } else if ($slot->isappointed > 1) {
-                $groupalt = 'isnonexclusive';
-            } else if ($slot->editable) {
-                if ($slot->exclusivity == 1) {
-                    $groupact = array('what' => 'allowgroup', 'slotid' => $slot->slotid);
-                    $groupalt = 'allowgroup';
-                } else {
-                    $groupact = array('what' => 'forbidgroup', 'slotid' => $slot->slotid);
-                    $groupalt = 'forbidgroup';
-                }
-            } else {
-                if ($slot->exclusivity == 1) {
-                    $groupalt = 'allowgroup';
-                } else {
-                    $groupalt = 'forbidgroup';
-                }
-            }
-            if ($groupact) {
-                $url = new moodle_url($slotman->actionurl, $groupact);
-                $actions .= $this->action_icon($url, new pix_icon($groupicon, get_string($groupalt, 'scheduler')));
-            } else {
-                $actions .= $this->pix_icon($groupicon, get_string($groupalt, 'scheduler'));
-            }
 
             if ($slot->editable && $slot->isappointed) {
                 $url = new moodle_url($slotman->actionurl, array('what' => 'revokeall', 'slotid' => $slot->slotid));

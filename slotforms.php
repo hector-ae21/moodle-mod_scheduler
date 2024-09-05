@@ -77,60 +77,6 @@ abstract class scheduler_slotform_base extends moodleform {
     }
 
     /**
-     * Add basic fields to this form. To be used in definition() methods of subclasses.
-     */
-    protected function add_base_fields() {
-
-        global $CFG, $USER;
-
-        $mform = $this->_form;
-
-        // Exclusivity.
-        $exclgroup = array();
-
-        $exclgroup[] = $mform->createElement('text', 'exclusivity', '', array('size' => '10'));
-        $mform->setType('exclusivity', PARAM_INTEGER);
-        $mform->setDefault('exclusivity', 1);
-
-        $exclgroup[] = $mform->createElement('advcheckbox', 'exclusivityenable', '', get_string('enable'));
-        $mform->setDefault('exclusivityenable', 1);
-        $mform->disabledIf('exclusivity', 'exclusivityenable', 'eq', 0);
-
-        $mform->addGroup($exclgroup, 'exclusivitygroup', get_string('maxstudentsperslot', 'scheduler'), ' ', false);
-        $mform->addHelpButton('exclusivitygroup', 'exclusivity', 'scheduler');
-
-        // Location of the appointment.
-        $mform->addElement('text', 'appointmentlocation', get_string('location', 'scheduler'), array('size' => '30'));
-        $mform->setType('appointmentlocation', PARAM_TEXT);
-        $mform->addRule('appointmentlocation', get_string('error'), 'maxlength', 255);
-        $mform->setDefault('appointmentlocation', $this->scheduler->get_last_location($USER));
-        $mform->addHelpButton('appointmentlocation', 'location', 'scheduler');
-
-        // Choose the teacher (if allowed).
-        if (has_capability('mod/scheduler:canscheduletootherteachers', $this->scheduler->get_context())) {
-            $teachername = s($this->scheduler->get_teacher_name());
-            $teachers = $this->scheduler->get_available_teachers();
-            $teachersmenu = array();
-            if ($teachers) {
-                foreach ($teachers as $teacher) {
-                    $teachersmenu[$teacher->id] = fullname($teacher);
-                }
-                $mform->addElement('select', 'teacherid', $teachername, $teachersmenu);
-                $mform->addRule('teacherid', get_string('noteacherforslot', 'scheduler'), 'required');
-                $mform->setDefault('teacherid', $USER->id);
-            } else {
-                $mform->addElement('static', 'teacherid', $teachername, get_string('noteachershere', 'scheduler', $teachername));
-            }
-            $mform->addHelpButton('teacherid', 'bookwithteacher', 'scheduler');
-        } else {
-            $mform->addElement('hidden', 'teacherid');
-            $mform->setDefault('teacherid', $USER->id);
-            $mform->setType('teacherid', PARAM_INT);
-        }
-
-    }
-
-    /**
      * Add an input field for a number of minutes
      *
      * @param string $name field name
@@ -586,43 +532,6 @@ class scheduler_addsession_form extends scheduler_slotform_base {
         // Break between slots.
         $this->add_minutes_field('break', 'break', 0, 'minutes');
         $mform->disabledIf('break', 'divide', 'eq', '0');
-
-        // Force when overlap?
-        $mform->addElement('selectyesno', 'forcewhenoverlap', get_string('forcewhenoverlap', 'scheduler'));
-        $mform->addHelpButton('forcewhenoverlap', 'forcewhenoverlap', 'scheduler');
-
-        // Common fields.
-        $this->add_base_fields();
-
-        // Display slot from date - relative.
-        $hideuntilsel = array();
-        $hideuntilsel[0] = get_string('now', 'scheduler');
-        $hideuntilsel[DAYSECS] = get_string('onedaybefore', 'scheduler');
-        for ($i = 2; $i < 7; $i++) {
-            $hideuntilsel[DAYSECS * $i] = get_string('xdaysbefore', 'scheduler', $i);
-        }
-        $hideuntilsel[WEEKSECS] = get_string('oneweekbefore', 'scheduler');
-        for ($i = 2; $i < 7; $i++) {
-            $hideuntilsel[WEEKSECS * $i] = get_string('xweeksbefore', 'scheduler', $i);
-        }
-        $mform->addElement('select', 'hideuntilrel', get_string('displayfrom', 'scheduler'), $hideuntilsel);
-        $mform->setDefault('hideuntilsel', 0);
-
-        // E-mail reminder from.
-        $remindersel = array();
-        $remindersel[-1] = get_string('never', 'scheduler');
-        $remindersel[0] = get_string('onthemorningofappointment', 'scheduler');
-        $remindersel[DAYSECS] = get_string('onedaybefore', 'scheduler');
-        for ($i = 2; $i < 7; $i++) {
-            $remindersel[DAYSECS * $i] = get_string('xdaysbefore', 'scheduler', $i);
-        }
-        $remindersel[WEEKSECS] = get_string('oneweekbefore', 'scheduler');
-        for ($i = 2; $i < 7; $i++) {
-            $remindersel[WEEKSECS * $i] = get_string('xweeksbefore', 'scheduler', $i);
-        }
-
-        $mform->addElement('select', 'emaildaterel', get_string('emailreminder', 'scheduler'), $remindersel);
-        $mform->setDefault('remindersel', -1);
 
         $this->add_action_buttons();
 

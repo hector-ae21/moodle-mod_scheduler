@@ -25,9 +25,9 @@
 use \mod_scheduler\model\scheduler;
 
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once($CFG->dirroot.'/mod/scheduler/lib.php');
-require_once($CFG->dirroot.'/mod/scheduler/locallib.php');
-require_once($CFG->dirroot.'/mod/scheduler/renderable.php');
+require_once($CFG->dirroot . '/mod/scheduler/lib.php');
+require_once($CFG->dirroot . '/mod/scheduler/locallib.php');
+require_once($CFG->dirroot . '/mod/scheduler/renderable.php');
 
 // Read common request parameters.
 $id = optional_param('id', '', PARAM_INT);    // Course Module ID - if it's not specified, must specify 'a', see below.
@@ -75,26 +75,10 @@ $teachercaps = ['mod/scheduler:manage', 'mod/scheduler:manageallappointments', '
 $isteacher = has_any_capability($teachercaps, $context);
 $isstudent = has_capability('mod/scheduler:viewslots', $context);
 if ($isteacher) {
-    // Teacher side.
-    if ($action == 'viewstatistics') {
-        include($CFG->dirroot.'/mod/scheduler/viewstatistics.php');
-    } else if ($action == 'viewstudent') {
-        include($CFG->dirroot.'/mod/scheduler/viewstudent.php');
-    } else if ($action == 'export') {
-        include($CFG->dirroot.'/mod/scheduler/export.php');
-    } else if ($action == 'datelist') {
-        include($CFG->dirroot.'/mod/scheduler/datelist.php');
-    } else {
-        include($CFG->dirroot.'/mod/scheduler/teacherview.php');
-    }
-
+    include($CFG->dirroot . '/mod/scheduler/teacherview.php');
 } else if ($isstudent) {
     // Student side.
-    include($CFG->dirroot.'/mod/scheduler/studentview.php');
-
+    include($CFG->dirroot . '/mod/scheduler/studentview.php');
 } else {
-    // For guests.
-    echo $OUTPUT->header();
-    echo $OUTPUT->box(get_string('guestscantdoanything', 'scheduler'), 'generalbox');
-    echo $OUTPUT->footer($course);
+    throw new moodle_exception('error/nopermission', 'scheduler');
 }

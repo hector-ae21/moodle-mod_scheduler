@@ -766,7 +766,6 @@ class scheduler extends mvc_record_model {
         $wherecond .= " AND ($subcond)";
         $order = 's.starttime ASC, s.duration ASC, s.teacherid';
         $slots = $this->fetch_slots($wherecond, '', $params, '', '', $order);
-
         return $slots;
     }
 

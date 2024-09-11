@@ -398,7 +398,7 @@ class mod_scheduler_renderer extends plugin_renderer_base {
             $table->align[] = 'left';
         }
         if ($slottable->showslot && $slottable->showlocation) {
-            $table->head[]  = get_string('location', 'scheduler');
+            $table->head[]  = get_string('experience', 'scheduler');
             $table->align[] = 'left';
         }
 
@@ -604,10 +604,9 @@ class mod_scheduler_renderer extends plugin_renderer_base {
 
         $table = new html_table();
         $table->head  = array( get_string('date', 'scheduler'), get_string('start', 'scheduler'),
-                        get_string('end', 'scheduler'), get_string('location', 'scheduler'),
-                        get_string('comments', 'scheduler'), s($booker->scheduler->get_teacher_name()),
-                        get_string('groupsession', 'scheduler'), '');
-        $table->align = array ('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left');
+                        get_string('end', 'scheduler'), get_string('experience', 'scheduler'),
+                        get_string('comments', 'scheduler'), s($booker->scheduler->get_teacher_name()), '');
+        $table->align = array ('left', 'left', 'left', 'left',  'left', 'left', 'left');
         $table->id = 'slotbookertable';
         $table->data = array();
 
@@ -651,13 +650,6 @@ class mod_scheduler_renderer extends plugin_renderer_base {
                                              'slotnote', $slot->slotid);
 
             $rowdata[] = $this->user_profile_link($booker->scheduler, $slot->teacher);
-
-            $groupinfo = $slot->bookedbyme ? get_string('complete', 'scheduler') : $slot->groupinfo;
-            if ($slot->otherstudents) {
-                $groupinfo .= $this->render($slot->otherstudents);
-            }
-
-            $rowdata[] = $groupinfo;
 
             if ($slot->canbook) {
                 $bookaction = $booker->scheduler->uses_bookingform() ? 'bookingform' : 'bookslot';
@@ -715,7 +707,7 @@ class mod_scheduler_renderer extends plugin_renderer_base {
 
         $table = new html_table();
         $table->head  = array('', get_string('date', 'scheduler'), get_string('start', 'scheduler'),
-                        get_string('end', 'scheduler'), get_string('location', 'scheduler'), get_string('students', 'scheduler') );
+                        get_string('end', 'scheduler'), get_string('experience', 'scheduler'), get_string('students', 'scheduler') );
         $table->align = array ('center', 'left', 'left', 'left', 'left', 'left');
         if ($slotman->showteacher) {
             $table->head[] = s($slotman->scheduler->get_teacher_name());
@@ -943,7 +935,7 @@ class mod_scheduler_renderer extends plugin_renderer_base {
 
             if ($ai->slot->appointmentlocation) {
                 $row = new html_table_row();
-                $cell1 = new html_table_cell(get_string('location', 'scheduler'));
+                $cell1 = new html_table_cell(get_string('experience', 'scheduler'));
                 $cell2 = new html_table_cell(format_string($ai->slot->appointmentlocation));
                 $row->cells = array($cell1, $cell2);
                 $t->data[] = $row;

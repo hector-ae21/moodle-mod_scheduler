@@ -33,3 +33,6 @@ $plugin->version   = 2023052300;      // The current module version (Date: YYYYM
 $plugin->release   = '4.0.0';       // Human-friendly version name.
 $plugin->requires  = 2022041900;      // Requires Moodle 4.0.
 $plugin->maturity  = MATURITY_STABLE;  // Stable version.
+$plugin->dependecies = [
+    'local_digitalta' => 2023052300
+];

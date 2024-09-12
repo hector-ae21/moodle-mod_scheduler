@@ -27,6 +27,9 @@ namespace mod_scheduler\model;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/grade/lib.php');
+require_once($CFG->dirroot . '/local/digitalta/classes/tutors.php');
+
+use local_digitalta\Tutors;
 
 /**
  * A class for representing a scheduler instance, as an MVC model.
@@ -739,15 +742,35 @@ class scheduler extends mvc_record_model {
     public function get_slots_available_to_student($studentid, $includefullybooked = false) {
 
         global $DB;
-
+        $experienceid = optional_param('experienceid', 0, PARAM_INT);
+        $tutors = Tutors::requests_get_by_experience($experienceid);
+    
+        $tutorids = array();
+        foreach ($tutors as $tutor) {
+            if ($tutor->tutorid && $tutor->tutorid != $studentid) {
+                $tutorids[] = $tutor->tutorid;
+            }
+        }
+        if (empty($tutorids)) {
+            return array();
+        }
+        
+        list($tutoridssql, $tutorparams) = $DB->get_in_or_equal($tutorids, SQL_PARAMS_NAMED, 'tutorid');
+    
+        
         $params = array();
         $wherecond = "(s.starttime > :cutofftime) AND (s.hideuntil < :nowhide) ";
         $params['nowhide'] = time();
         $params['cutofftime'] = time() + $this->guardtime;
+    
+        $wherecond .= " AND s.teacherid $tutoridssql";
+        $params = array_merge($params, $tutorparams);
+    
         $subcond = 'NOT ('.$this->student_in_slot_condition($params, $studentid, false, false).')';
         if (!$includefullybooked) {
             $subcond .= ' AND (s.exclusivity = 0 OR s.exclusivity > '.$this->appointment_count_query().')';
         }
+    
         if ($this->groupmode != NOGROUPS) {
             $groups = groups_get_all_groups($this->cm->course, $studentid, $this->cm->groupingid);
             if ($groups) {
@@ -763,6 +786,7 @@ class scheduler extends mvc_record_model {
                 $subcond .= " AND FALSE";
             }
         }
+    
         $wherecond .= " AND ($subcond)";
         $order = 's.starttime ASC, s.duration ASC, s.teacherid';
         $slots = $this->fetch_slots($wherecond, '', $params, '', '', $order);

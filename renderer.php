@@ -282,7 +282,7 @@ class mod_scheduler_renderer extends plugin_renderer_base
      */
     public function user_profile_link(scheduler $scheduler, stdClass $user)
     {
-        $profileurl = new moodle_url('/user/view.php', array('id' => $user->id, 'course' => $scheduler->course));
+        $profileurl = new moodle_url('/local/digitalta/pages/profile/index.php', array('id' => $user->id, 'course' => $scheduler->course));
         return html_writer::link($profileurl, fullname($user));
     }
 
@@ -779,7 +779,6 @@ class mod_scheduler_renderer extends plugin_renderer_base
 
         $table = new html_table();
         $table->head  = array(
-            '',
             get_string('date', 'scheduler'),
             get_string('start', 'scheduler'),
             get_string('end', 'scheduler'),
@@ -804,9 +803,6 @@ class mod_scheduler_renderer extends plugin_renderer_base
         foreach ($slotman->slots as $slot) {
 
             $rowdata = array();
-
-            $selectbox = html_writer::checkbox('selectedslot[]', $slot->slotid, false, '', array('class' => 'slotselect'));
-            $rowdata[] = $slot->editable ? $selectbox : '';
 
             $startdate = $this->userdate($slot->starttime);
             $starttime = $this->usertime($slot->starttime);
@@ -851,7 +847,7 @@ class mod_scheduler_renderer extends plugin_renderer_base
 
                 if ($scheduler->notes) {
                     $experienceurl = new moodle_url('/local/digitalta/pages/experiences/view.php', array('id' => $scheduler->notes));
-                    $arrowicon = new pix_icon('t/go', get_string('gototheexperience', 'mod_scheduler'));
+                    $arrowicon = new pix_icon('e/forward', get_string('gototheexperience', 'mod_scheduler'));
                     $actions .= $this->action_icon($experienceurl, $arrowicon);
                 }
 

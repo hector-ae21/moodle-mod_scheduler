@@ -289,6 +289,9 @@ switch ($action) {
             }
         }
 
+        $slot->appointmentlocation = '';
+        $slot->notes = "";
+
         $slot->save();
         redirect($viewurl);
         break;

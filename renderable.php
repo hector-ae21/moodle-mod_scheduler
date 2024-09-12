@@ -250,6 +250,11 @@ class scheduler_slot_booker implements renderable {
     public $actionurl;
 
     /**
+     * @var int experienceid the id of the experience
+     */
+    public $experienceid;
+
+    /**
      * Add a slot to the list.
      *
      * @param slot $slotmodel the slot to be added
@@ -283,10 +288,11 @@ class scheduler_slot_booker implements renderable {
      * @param moodle_url $actionurl
      * @param int $maxselect no longer used
      */
-    public function __construct(scheduler $scheduler, $studentid, moodle_url $actionurl, $maxselect) {
+    public function __construct(scheduler $scheduler, $studentid, moodle_url $actionurl, $experienceid, $maxselect) {
         $this->scheduler = $scheduler;
         $this->studentid = $studentid;
         $this->actionurl = $actionurl;
+        $this->experienceid = $experienceid;
     }
 
 }

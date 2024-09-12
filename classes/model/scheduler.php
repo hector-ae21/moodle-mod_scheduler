@@ -741,7 +741,7 @@ class scheduler extends mvc_record_model {
         global $DB;
 
         $params = array();
-        $wherecond = "(s.starttime > :cutofftime) AND (s.hideuntil < :nowhide)";
+        $wherecond = "(s.starttime > :cutofftime) AND (s.hideuntil < :nowhide) ";
         $params['nowhide'] = time();
         $params['cutofftime'] = time() + $this->guardtime;
         $subcond = 'NOT ('.$this->student_in_slot_condition($params, $studentid, false, false).')';
@@ -1217,6 +1217,8 @@ class scheduler extends mvc_record_model {
         $appointment = $slot->get_appointment($appointmentid);
 
         // Delete the appointment.
+        $slot->appointmentlocation = '';
+        $slot->notes = '';
         $slot->remove_appointment($appointment);
         $slot->save();
     }

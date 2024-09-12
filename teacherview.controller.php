@@ -218,7 +218,8 @@ function scheduler_action_delete_slots(array $slots, $action, moodle_url $return
     }
     $messagetype = ($cnt > 0) ? \core\output\notification::NOTIFY_SUCCESS : \core\output\notification::NOTIFY_INFO;
     \core\notification::add($message, $messagetype);
-    redirect($returnurl);
+    $url = new moodle_url($returnurl, array('istutor' => 1));  
+    redirect($url);
 }
 
 // Require valid session key for all actions.

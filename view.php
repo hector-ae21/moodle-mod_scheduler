@@ -34,11 +34,12 @@ $id = optional_param('id', '', PARAM_INT);    // Course Module ID - if it's not 
 $action = optional_param('what', 'view', PARAM_ALPHA);
 $subaction = optional_param('subaction', '', PARAM_ALPHA);
 $offset = optional_param('offset', -1, PARAM_INT);
+$istutor = optional_param('istutor', 0, PARAM_BOOL);
 
 if ($id) {
     $cm = get_coursemodule_from_id('scheduler', $id, 0, false, MUST_EXIST);
     $scheduler = scheduler::load_by_coursemodule_id($id);
-} else {
+} else { 
     $a = required_param('a', PARAM_INT);     // Scheduler ID.
     $scheduler = scheduler::load_by_id($a);
     $cm = $scheduler->get_cm();
@@ -51,10 +52,9 @@ $context = context_module::instance($cm->id);
 $permissions = new \mod_scheduler\permission\scheduler_permissions($context, $USER->id);
 
 // Initialize $PAGE, compute blocks.
-$PAGE->set_url('/mod/scheduler/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/scheduler/view.php', array('id' => $cm->id, 'istutor' => $istutor));
 
 $output = $PAGE->get_renderer('mod_scheduler');
-
 if (groups_get_activity_groupmode($cm) || !$permissions->can_see_all_slots()) {
     $defaultsubpage = 'myappointments';
 } else {
@@ -74,11 +74,11 @@ $PAGE->set_heading($course->fullname);
 $teachercaps = ['mod/scheduler:manage', 'mod/scheduler:manageallappointments', 'mod/scheduler:canseeotherteachersbooking'];
 $isteacher = has_any_capability($teachercaps, $context);
 $isstudent = has_capability('mod/scheduler:viewslots', $context);
-if ($isteacher) {
+if ($istutor) {
     include($CFG->dirroot . '/mod/scheduler/teacherview.php');
 } else if ($isstudent) {
-    // Student side.
     include($CFG->dirroot . '/mod/scheduler/studentview.php');
+    // Student side.
 } else {
     throw new moodle_exception('error/nopermission', 'scheduler');
 }

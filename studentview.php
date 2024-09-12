@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $appointgroup = optional_param('appointgroup', -1, PARAM_INT);
+$experienceid = optional_param('experienceid', -1, PARAM_INT);
 
 \mod_scheduler\event\booking_form_viewed::create_from_scheduler($scheduler)->trigger();
 
@@ -32,6 +33,7 @@ $PAGE->set_docs_path('mod/scheduler/studentview');
 
 $urlparas = array(
         'id' => $scheduler->cmid,
+        'experienceid' => $experienceid,
         'sesskey' => sesskey()
 );
 if ($appointgroup >= 0) {
@@ -176,7 +178,7 @@ if (!$canseefull && $bookablecnt == 0) {
     // The student can book (or see) further appointments, and slots are available.
     // Show the booking form.
 
-    $booker = new scheduler_slot_booker($scheduler, $USER->id, $actionurl, $bookablecnt);
+    $booker = new scheduler_slot_booker($scheduler, $USER->id, $actionurl, $experienceid, $bookablecnt);
 
     $pagesize = 25;
     $total = count($bookableslots);

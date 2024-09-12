@@ -127,6 +127,7 @@ $string['appointmentsgrouped'] = 'Appointments grouped by slot';
 $string['appointsolo'] = 'just me';
 $string['appointsomeone'] = 'Add new appointment';
 $string['appointmentsummary'] = 'Appointment on {$a->startdate} from {$a->starttime} to {$a->endtime} with {$a->teacher}';
+$string['gototheexperience'] = 'Go to the experience';
 $string['attendable'] = 'Attendable';
 $string['attendablelbl'] = 'Total candidates for scheduling';
 $string['attended'] = 'Attended';

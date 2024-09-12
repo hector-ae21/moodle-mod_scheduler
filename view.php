@@ -68,7 +68,6 @@ $subpage = optional_param('subpage', $defaultsubpage, PARAM_ALPHA);
 $title = $course->shortname . ': ' . format_string($scheduler->name);
 $PAGE->set_title($title);
 $PAGE->set_heading($course->fullname);
-
 // Route to screen.
 
 $teachercaps = ['mod/scheduler:manage', 'mod/scheduler:manageallappointments', 'mod/scheduler:canseeotherteachersbooking'];
@@ -76,9 +75,6 @@ $isteacher = has_any_capability($teachercaps, $context);
 $isstudent = has_capability('mod/scheduler:viewslots', $context);
 if ($istutor) {
     include($CFG->dirroot . '/mod/scheduler/teacherview.php');
-} else if ($isstudent) {
-    include($CFG->dirroot . '/mod/scheduler/studentview.php');
-    // Student side.
 } else {
-    throw new moodle_exception('error/nopermission', 'scheduler');
+    include($CFG->dirroot . '/mod/scheduler/studentview.php');
 }

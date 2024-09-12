@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $appointgroup = optional_param('appointgroup', -1, PARAM_INT);
-$experienceid = optional_param('experienceid', -1, PARAM_INT);
+$experienceid = optional_param('experienceid', -1,  PARAM_INT);
 
 \mod_scheduler\event\booking_form_viewed::create_from_scheduler($scheduler)->trigger();
 
@@ -43,7 +43,7 @@ $actionurl = new moodle_url('/mod/scheduler/view.php', $urlparas);
 
 
 // General permissions check.
-require_capability('mod/scheduler:viewslots', $context);
+// require_capability('mod/scheduler:viewslots', $context);
 $canbook = has_capability('mod/scheduler:appoint', $context);
 $canseefull = has_capability('mod/scheduler:viewfullslots', $context);
 

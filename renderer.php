@@ -527,7 +527,7 @@ class mod_scheduler_renderer extends plugin_renderer_base
                 }
                 if ($slot->cancancel) {
                     $buttonurl = new moodle_url(
-                        $slot->slotnote
+                        "/local/digitalta/pages/experiences/view.php?id=$slot->slotnote"
                     );
                     $button = new single_button($buttonurl, get_string('gototheexperience', 'mod_scheduler'));
                     $actions .= $this->render($button);

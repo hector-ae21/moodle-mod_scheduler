@@ -10,6 +10,19 @@
     font-weight: bold;
 }
 
+#page-mod-scheduler-view .nav-item [data-region="morebutton"]{
+    display: none;
+}
+
+#page-mod-scheduler-view {
+    .drawer-toggles {
+    display: none !important;
+    }
+    .dropdownmoremenu{
+    display: none !important;
+    }
+}
+
 .path-mod-scheduler div.slotnotes {
     background-color: #e8e9ee;
     border: solid 1px #a7abbe;

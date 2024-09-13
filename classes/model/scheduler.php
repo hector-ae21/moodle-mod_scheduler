@@ -864,6 +864,8 @@ class scheduler extends mvc_record_model {
      * @return mixed SQL condition and parameters
      */
     protected function slots_for_teacher_cond($teacherid, $groupid, $timerange) {
+        global $USER;
+        $teacherid = (int)$USER->id;
         $wheres = array();
         $params = array();
         if ($teacherid > 0) {

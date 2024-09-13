@@ -15,10 +15,7 @@
 }
 
 #page-mod-scheduler-view {
-    .drawer-toggles {
-    display: none !important;
-    }
-    .dropdownmoremenu{
+    .drawer-toggles,.dropdownmoremenu, .drawer.drawer-left, .secondary-navigation, #page-header {
     display: none !important;
     }
 }

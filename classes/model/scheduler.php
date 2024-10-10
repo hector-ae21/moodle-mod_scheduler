@@ -742,18 +742,11 @@ class scheduler extends mvc_record_model {
     public function get_slots_available_to_student($studentid, $includefullybooked = false) {
 
         global $DB;
-        $experienceid = optional_param('experienceid', 0, PARAM_INT);
-        $tutors = Tutors::requests_get_by_experience($experienceid);
+        $tutorid = optional_param('tutorid', 0, PARAM_INT);
     
         $tutorids = array();
-        foreach ($tutors as $tutor) {
-            if ($tutor->tutorid && $tutor->tutorid != $studentid) {
-                $tutorids[] = $tutor->tutorid;
-            }
-        }
-        if (empty($tutorids)) {
-            return array();
-        }
+        $tutorids[] = $tutorid;
+
         
         list($tutoridssql, $tutorparams) = $DB->get_in_or_equal($tutorids, SQL_PARAMS_NAMED, 'tutorid');
     

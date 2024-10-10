@@ -718,7 +718,7 @@ class mod_scheduler_renderer extends plugin_renderer_base
 
             $rowdata[] = $this->user_profile_link($booker->scheduler, $slot->teacher);
 
-            if ($slot->canbook) {
+            if ($slot->canbook && $booker->experienceid>0) {
                 $bookaction = $booker->scheduler->uses_bookingform() ? 'bookingform' : 'bookslot';
                 $bookurl = new moodle_url("$booker->actionurl", array('experienceid' => $booker->experienceid, 'what' => $bookaction, 'slotid' => $slot->slotid,));
                 $button = new single_button($bookurl, get_string('bookslot', 'scheduler'));

@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $appointgroup = optional_param('appointgroup', -1, PARAM_INT);
 $experienceid = optional_param('experienceid', -1,  PARAM_INT);
+$tutorid = optional_param('tutorid', 0, PARAM_INT);
 
 \mod_scheduler\event\booking_form_viewed::create_from_scheduler($scheduler)->trigger();
 
@@ -34,7 +35,8 @@ $PAGE->set_docs_path('mod/scheduler/studentview');
 $urlparas = array(
         'id' => $scheduler->cmid,
         'experienceid' => $experienceid,
-        'sesskey' => sesskey()
+        'tutorid' => $tutorid,
+        'sesskey' => sesskey(),
 );
 if ($appointgroup >= 0) {
     $urlparas['appointgroup'] = $appointgroup;
